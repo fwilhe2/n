@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+#   schedule:
+#     - cron:  '53 6-20 * * *'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: run
+        run: |
+          mkdir public
+          go run . > public/index.html
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
