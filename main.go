@@ -58,7 +58,7 @@ func main() {
 			} else {
 				date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", newsFeedItem.PublishDate)
 				pleaseBeNoError(err)
-				fmt.Printf("<a href=\"%s\">%s</a> <i>%s</i><br/>\n", newsFeedItem.Link, newsFeedItem.Title, date.Local().Format("2.Jan.2006 15:04:05"))
+				fmt.Printf("<a href=\"%s\">%s</a> <i>%s</i><br/>\n", newsFeedItem.Link, newsFeedItem.Title, date.Local().Format(time.Kitchen))
 			}
 		}
 	}
