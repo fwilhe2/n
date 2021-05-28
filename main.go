@@ -35,6 +35,9 @@ func pleaseBeNoError(err error) {
 func main() {
 	feeds := []string{
 		"https://www.deutschlandfunk.de/politik.1499.de.rss",
+		"https://www.tagesschau.de/xml/rss2/",
+		"https://www.spiegel.de/politik/index.rss",
+		"https://www.swr.de/export:xml:rss/swraktuell/baden-wuerttemberg/swraktuell-bw-100.html",
 		"http://apod.nasa.gov/apod.rss",
 		"https://xkcd.com/rss.xml",
 		"http://blog.acolyer.org/feed/",
@@ -54,7 +57,6 @@ func main() {
 		for _, newsFeedItem := range newsFeed.Channel.Items {
 			if newsFeedItem.PublishDate == "" {
 				fmt.Printf("<a href=\"%s\">%s</a><br/>\n", newsFeedItem.Link, newsFeedItem.Title)
-
 			} else {
 				date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", newsFeedItem.PublishDate)
 				pleaseBeNoError(err)
