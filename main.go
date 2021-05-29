@@ -44,6 +44,7 @@ func main() {
 		"http://planet.debian.org/rss20.xml",
 	}
 
+	fmt.Println("<head> <style> h1 { line-height: 1.3; } body { line-height: 1.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
 	for _, feedUrl := range feeds {
 		resp, err := http.Get(feedUrl)
 		pleaseBeNoError(err)
