@@ -44,7 +44,8 @@ func main() {
 		"http://planet.debian.org/rss20.xml",
 	}
 
-	fmt.Println("<head> <style> h1 { line-height: 1.3; } body { line-height: 1.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
+	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body { line-height: 1.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
+	fmt.Printf("<h1>RSS News generated at %s</h1>", time.Now().Local().Format(time.Kitchen))
 	for _, feedUrl := range feeds {
 		resp, err := http.Get(feedUrl)
 		pleaseBeNoError(err)
@@ -54,7 +55,7 @@ func main() {
 		var newsFeed Feed
 		err = xml.Unmarshal(content, &newsFeed)
 		pleaseBeNoError(err)
-		fmt.Printf("\n\n<h1>%s</h1>\n", newsFeed.Channel.Title)
+		fmt.Printf("\n\n<h2>%s</h2>\n", newsFeed.Channel.Title)
 		for _, newsFeedItem := range newsFeed.Channel.Items {
 			if newsFeedItem.PublishDate == "" {
 				fmt.Printf("<a href=\"%s\">%s</a><br/>\n", newsFeedItem.Link, newsFeedItem.Title)
