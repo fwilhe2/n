@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+const DEFAULT_FEED_LENGTH = 7
+
 type Feed struct {
 	XMLName xml.Name `xml:"rss"`
 	Channel Channel  `xml:"channel"`
@@ -44,7 +46,7 @@ func main() {
 		"http://planet.debian.org/rss20.xml",
 	}
 
-	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body { line-height: 1.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
+	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 2.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
 	fmt.Printf("<h1>RSS News generated at %s</h1>", time.Now().Local().Format(time.Kitchen))
 	for _, feedUrl := range feeds {
 		resp, err := http.Get(feedUrl)
@@ -56,14 +58,29 @@ func main() {
 		err = xml.Unmarshal(content, &newsFeed)
 		pleaseBeNoError(err)
 		fmt.Printf("\n\n<h2>%s</h2>\n", newsFeed.Channel.Title)
-		for _, newsFeedItem := range newsFeed.Channel.Items {
+
+		// Limit the number of items for readability, thus not using a range loop
+		for i := 0; i < upperIndexBound(len(newsFeed.Channel.Items)); i++ {
+			newsFeedItem := newsFeed.Channel.Items[i]
+			if newsFeedItem.Link == "" || newsFeedItem.Title == "" {
+				s := fmt.Sprintf("Can't add entry with link '%s' and title '%s'.", newsFeedItem.Link, newsFeedItem.Title)
+				println(s)
+			}
 			if newsFeedItem.PublishDate == "" {
 				fmt.Printf("<a href=\"%s\">%s</a><br/>\n", newsFeedItem.Link, newsFeedItem.Title)
 			} else {
 				date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", newsFeedItem.PublishDate)
 				pleaseBeNoError(err)
-				fmt.Printf("<a href=\"%s\">%s</a> <i>%s</i><br/>\n", newsFeedItem.Link, newsFeedItem.Title, date.Local().Format("2006-01-02 15:04:05"))
+				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, newsFeedItem.Title, date.Local().Format("2006-01-02 15:04:05"))
 			}
 		}
 	}
+}
+
+func upperIndexBound(feedLen int) int {
+	if feedLen < DEFAULT_FEED_LENGTH {
+		return feedLen
+	}
+
+	return DEFAULT_FEED_LENGTH
 }
