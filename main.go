@@ -46,7 +46,7 @@ func main() {
 		"http://planet.debian.org/rss20.xml",
 	}
 
-	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 2.7; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
+	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 1.5; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
 	fmt.Printf("<h1>RSS News generated at %s</h1>", time.Now().Local().Format(time.Kitchen))
 	for _, feedUrl := range feeds {
 		resp, err := http.Get(feedUrl)
