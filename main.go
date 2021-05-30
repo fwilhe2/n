@@ -36,9 +36,8 @@ func pleaseBeNoError(err error) {
 
 func main() {
 	feeds := []string{
+		"https://www.deutschlandfunk.de/die-nachrichten.353.de.rss",
 		"https://www.deutschlandfunk.de/politik.1499.de.rss",
-		"https://www.tagesschau.de/xml/rss2/",
-		"https://www.spiegel.de/politik/index.rss",
 		"https://www.swr.de/export:xml:rss/swraktuell/baden-wuerttemberg/swraktuell-bw-100.html",
 		"http://apod.nasa.gov/apod.rss",
 		"https://xkcd.com/rss.xml",
