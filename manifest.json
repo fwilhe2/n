@@ -1,0 +1,20 @@
+{
+    "short_name": "News",
+    "name": "Personal newsreader",
+    "icons": [
+        {
+            "src": "/images/pixel-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#263453",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#263453",
+    "shortcuts": [],
+    "description": "News reader",
+    "screenshots": [
+    ]
+}

@@ -21,6 +21,8 @@ jobs:
           mkdir public
           go run . > public/index.html
           mv news-archive.json public/
+          cp manifest.json public/
+          cp -r images public/
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: crazy-max/ghaction-github-pages@v2
