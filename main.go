@@ -68,12 +68,24 @@ func main() {
 			if newsFeedItem.PublishDate == "" {
 				fmt.Printf("<a href=\"%s\">%s</a><br/>\n", newsFeedItem.Link, newsFeedItem.Title)
 			} else {
-				date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", newsFeedItem.PublishDate)
-				pleaseBeNoError(err)
-				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, newsFeedItem.Title, date.Local().Format("2006-01-02 15:04:05"))
+				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, newsFeedItem.Title, formatDate(newsFeedItem.PublishDate))
 			}
 		}
 	}
+}
+
+func formatDate(inputDateString string) string {
+	if inputDateString == "" {
+		return ""
+	}
+
+	date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", inputDateString)
+	if err != nil {
+		panic("fixme "+err.Error())
+	}
+
+	return date.Local().Format("2006-01-02 15:04:05")
+
 }
 
 func upperIndexBound(feedLen int) int {
