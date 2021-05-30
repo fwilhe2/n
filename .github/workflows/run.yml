@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir public
           go run . > public/index.html
+          mv news-archive.json public/
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: crazy-max/ghaction-github-pages@v2

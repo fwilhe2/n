@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -11,6 +13,7 @@ import (
 
 const DEFAULT_FEED_LENGTH = 7
 
+// xml parse
 type Feed struct {
 	XMLName xml.Name `xml:"rss"`
 	Channel Channel  `xml:"channel"`
@@ -34,6 +37,23 @@ func pleaseBeNoError(err error) {
 	}
 }
 
+// json serialize
+type NewsArchive struct {
+	LastUpdated string     `json:"lastUpdated"`
+	NewsFeeds   []NewsFeed `json:"news"`
+}
+
+type NewsFeed struct {
+	Title         string         `json:"title"`
+	NewsFeedItems []NewsFeedItem `json:"items"`
+}
+
+type NewsFeedItem struct {
+	Title       string `json:"title"`
+	Link        string `json:"link"`
+	PublishDate string `json:"pubDate"`
+}
+
 func main() {
 	feeds := []string{
 		"https://www.deutschlandfunk.de/die-nachrichten.353.de.rss",
@@ -43,6 +63,10 @@ func main() {
 		"https://xkcd.com/rss.xml",
 		"http://blog.acolyer.org/feed/",
 		"http://planet.debian.org/rss20.xml",
+	}
+
+	newsArchive := NewsArchive{
+		LastUpdated: time.Now().String(),
 	}
 
 	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 1.5; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
@@ -58,6 +82,10 @@ func main() {
 		pleaseBeNoError(err)
 		fmt.Printf("\n\n<h2>%s</h2>\n", newsFeed.Channel.Title)
 
+		currentFeed := NewsFeed{
+			Title: newsFeed.Channel.Title,
+		}
+
 		// Limit the number of items for readability, thus not using a range loop
 		for i := 0; i < upperIndexBound(len(newsFeed.Channel.Items)); i++ {
 			newsFeedItem := newsFeed.Channel.Items[i]
@@ -70,8 +98,15 @@ func main() {
 			} else {
 				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, newsFeedItem.Title, formatDate(newsFeedItem.PublishDate))
 			}
+			currentFeed.NewsFeedItems = append(currentFeed.NewsFeedItems, NewsFeedItem(newsFeedItem))
 		}
+		newsArchive.NewsFeeds = append(newsArchive.NewsFeeds, currentFeed)
 	}
+
+	newsFeedJSON, err := json.MarshalIndent(newsArchive, "", "  ")
+	pleaseBeNoError(err)
+	err = ioutil.WriteFile("news-archive.json", newsFeedJSON, 0644)
+	pleaseBeNoError(err)
 }
 
 func formatDate(inputDateString string) string {
@@ -81,11 +116,10 @@ func formatDate(inputDateString string) string {
 
 	date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", inputDateString)
 	if err != nil {
-		panic("fixme "+err.Error())
+		panic("fixme " + err.Error())
 	}
 
 	return date.Local().Format("2006-01-02 15:04:05")
-
 }
 
 func upperIndexBound(feedLen int) int {
