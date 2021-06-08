@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -30,9 +31,9 @@ type Item struct {
 	PublishDate string `xml:"pubDate"`
 }
 
-func pleaseBeNoError(err error) {
+func pleaseBeNoError(err error, moreInfo ...string) {
 	if err != nil {
-		println("Oh no we got an error, ", err.Error())
+		fmt.Println("Oh no we got an error, ", err.Error(), strings.Join(moreInfo[:], ","))
 		os.Exit(1)
 	}
 }
@@ -81,7 +82,7 @@ func main() {
 		pleaseBeNoError(err)
 		var newsFeed Feed
 		err = xml.Unmarshal(content, &newsFeed)
-		pleaseBeNoError(err)
+		pleaseBeNoError(err, feedUrl)
 		fmt.Printf("\n\n<h2>%s</h2>\n", newsFeed.Channel.Title)
 
 		currentFeed := NewsFeed{
