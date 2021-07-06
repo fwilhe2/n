@@ -71,9 +71,9 @@ func main() {
 		LastUpdated: time.Now().String(),
 	}
 
-	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 1.5; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } </style> </head>")
+	fmt.Println("<head> <style> h1,h2 { line-height: 1.3; } body {font-size: x-large; line-height: 1.5; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .news-page { display: flex; flex-flow: row wrap; } @media all and (min-width: 0px) { .news-source { width: 100%; } } @media all and (min-width: 1000px) { .news-source { width: 33%; } } </style> </head>")
 	fmt.Println(`<link rel="manifest" href="/n/manifest.json">`)
-	fmt.Printf("<h1>RSS News generated at %s</h1>", time.Now().Local().Format(time.Kitchen))
+	fmt.Printf("<h1>RSS News generated at %s</h1>\n<div class=\"news-page\">", time.Now().Local().Format(time.Kitchen))
 	for _, feedUrl := range feeds {
 		resp, err := http.Get(feedUrl)
 		pleaseBeNoError(err)
@@ -83,7 +83,7 @@ func main() {
 		var newsFeed Feed
 		err = xml.Unmarshal(content, &newsFeed)
 		pleaseBeNoError(err, feedUrl)
-		fmt.Printf("\n\n<h2>%s</h2>\n", newsFeed.Channel.Title)
+		fmt.Printf("\n\n<div class=\"news-source\">\n<h2>%s</h2>\n", newsFeed.Channel.Title)
 
 		currentFeed := NewsFeed{
 			Title: newsFeed.Channel.Title,
@@ -110,7 +110,11 @@ func main() {
 			currentFeed.NewsFeedItems = append(currentFeed.NewsFeedItems, NewsFeedItem(newsFeedItem))
 		}
 		newsArchive.NewsFeeds = append(newsArchive.NewsFeeds, currentFeed)
+
+		fmt.Println("\n</div>")
 	}
+
+	fmt.Println("\n</div>")
 
 	newsFeedJSON, err := json.MarshalIndent(newsArchive, "", "  ")
 	pleaseBeNoError(err)
