@@ -92,6 +92,12 @@ func main() {
 		// Limit the number of items for readability, thus not using a range loop
 		for i := 0; i < upperIndexBound(len(newsFeed.Channel.Items)); i++ {
 			newsFeedItem := newsFeed.Channel.Items[i]
+
+			// skip duplicated entries
+			if len(currentFeed.NewsFeedItems) > 1 && currentFeed.NewsFeedItems[len(currentFeed.NewsFeedItems) - 1].Title == newsFeedItem.Title {
+				continue
+			}
+
 			if newsFeedItem.Link == "" || newsFeedItem.Title == "" {
 				s := fmt.Sprintf("Can't add entry with link '%s' and title '%s'.", newsFeedItem.Link, newsFeedItem.Title)
 				println(s)
