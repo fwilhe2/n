@@ -60,7 +60,6 @@ func main() {
 		"https://www.deutschlandfunk.de/die-nachrichten.353.de.rss",
 		"https://www.deutschlandfunk.de/politik.1499.de.rss",
 		"https://www.rbb24.de/aktuell/index.xml/feed=rss.xml",
-		"https://www.swr.de/export:xml:rss/swraktuell/baden-wuerttemberg/swraktuell-bw-100.html",
 		"http://apod.nasa.gov/apod.rss",
 		"https://xkcd.com/rss.xml",
 		"http://blog.acolyer.org/feed/",
