@@ -64,6 +64,7 @@ func main() {
 		"https://xkcd.com/rss.xml",
 		"http://blog.acolyer.org/feed/",
 		"http://planet.debian.org/rss20.xml",
+		"https://fosstodon.org/@kernellogger.rss",
 	}
 
 	newsArchive := NewsArchive{
