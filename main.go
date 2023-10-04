@@ -5,7 +5,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -65,6 +64,7 @@ func main() {
 		"http://blog.acolyer.org/feed/",
 		"http://planet.debian.org/rss20.xml",
 		"https://fosstodon.org/@kernellogger.rss",
+		"https://jakelazaroff.github.io/til/rss.xml",
 	}
 
 	newsArchive := NewsArchive{
@@ -94,7 +94,7 @@ func main() {
 			newsFeedItem := newsFeed.Channel.Items[i]
 
 			// skip duplicated entries
-			if len(currentFeed.NewsFeedItems) > 1 && currentFeed.NewsFeedItems[len(currentFeed.NewsFeedItems) - 1].Title == newsFeedItem.Title {
+			if len(currentFeed.NewsFeedItems) > 1 && currentFeed.NewsFeedItems[len(currentFeed.NewsFeedItems)-1].Title == newsFeedItem.Title {
 				continue
 			}
 
@@ -118,7 +118,7 @@ func main() {
 
 	newsFeedJSON, err := json.MarshalIndent(newsArchive, "", "  ")
 	pleaseBeNoError(err)
-	err = ioutil.WriteFile("news-archive.json", newsFeedJSON, 0644)
+	err = os.WriteFile("news-archive.json", newsFeedJSON, 0644)
 	pleaseBeNoError(err)
 }
 
@@ -129,7 +129,13 @@ func formatDate(inputDateString string) string {
 
 	date, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", inputDateString)
 	if err != nil {
-		panic("fixme " + err.Error())
+
+		date, err = time.Parse("Mon, 2 Jan 2006 15:04:05 MST", inputDateString)
+
+		if err != nil {
+			panic("fixme " + err.Error())
+
+		}
 	}
 
 	return date.Local().Format("2006-01-02 15:04:05")
