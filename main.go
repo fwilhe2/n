@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"html"
 )
 
 const DEFAULT_FEED_LENGTH = 7
@@ -105,7 +106,7 @@ func main() {
 			if newsFeedItem.PublishDate == "" {
 				fmt.Printf("<a href=\"%s\">%s</a><br/>\n", newsFeedItem.Link, newsFeedItem.Title)
 			} else {
-				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, newsFeedItem.Title, formatDate(newsFeedItem.PublishDate))
+				fmt.Printf("<p><a href=\"%s\">%s <i>%s</i></a><p/>\n", newsFeedItem.Link, html.EscapeString(newsFeedItem.Title), formatDate(newsFeedItem.PublishDate))
 			}
 			currentFeed.NewsFeedItems = append(currentFeed.NewsFeedItems, NewsFeedItem(newsFeedItem))
 		}
