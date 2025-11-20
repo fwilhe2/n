@@ -6,14 +6,14 @@ on:
   #   - cron:  '0,30 4-22 * * *'
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - name: Set Timezone
         run: sudo timedatectl set-timezone Europe/Berlin
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version: '1.24'
       - run: go version
       - run: go test -v ./...
       - name: run
