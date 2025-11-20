@@ -59,13 +59,13 @@ func main() {
 	feeds := []string{
 		"https://www.deutschlandfunk.de/die-nachrichten.353.de.rss",
 		"https://www.deutschlandfunk.de/politik.1499.de.rss",
-		"https://www.rbb24.de/aktuell/index.xml/feed=rss.xml",
+		// "https://www.rbb24.de/aktuell/index.xml/feed=rss.xml",
 		"http://apod.nasa.gov/apod.rss",
 		"https://xkcd.com/rss.xml",
 		"http://blog.acolyer.org/feed/",
 		"http://planet.debian.org/rss20.xml",
 		"https://fosstodon.org/@kernellogger.rss",
-		"https://jakelazaroff.github.io/til/rss.xml",
+		// "https://jakelazaroff.github.io/til/rss.xml",
 	}
 
 	newsArchive := NewsArchive{
